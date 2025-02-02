@@ -29,9 +29,9 @@ public class SubmitOrderTest {
 		landingPage.goTo();
 		landingPage.loginApplication("sumitkoley727@gmail.com", "Sumit@123");
 		ProductCatalouge productCatalouge = new ProductCatalouge(driver);
-		//List<WebElement>products =productCatalouge.getProductList();
+		List<WebElement>products =productCatalouge.getProductList();
 		productCatalouge.addProductToCart(productName);
-		driver.findElement(By.cssSelector("[routerlink*='cart']")).click();
+		productCatalouge.addToCart();
 		
 		List<WebElement> cartProducts = driver.findElements(By.cssSelector(".cartSection h3"));
 		Boolean match = cartProducts.stream().anyMatch(cartProduct->cartProduct.getText().equalsIgnoreCase(productName));
