@@ -1,12 +1,9 @@
-package JavaAutomation.JavaSeleniumUIAutomation;
+package javaSeleniumUIAutomation.Tests;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
-import JavaSeleniumUIAutomation.pageobjects.LandingPage;
-import JavaSeleniumUIAutomation.pageobjects.ProductCatalouge;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,7 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-public class SubmitOrderTest {
+public class StandAloneTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -23,15 +20,19 @@ public class SubmitOrderTest {
 		String productName = "IPHONE 13 PRO";
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5));
 		driver.manage().window().maximize();
-		LandingPage landingPage = new LandingPage(driver);
-		landingPage.goTo();
-		landingPage.loginApplication("sumitkoley727@gmail.com", "Sumit@123");
-		ProductCatalouge productCatalouge = new ProductCatalouge(driver);
-		List<WebElement>products =productCatalouge.getProductList();
-		productCatalouge.addProductToCart(productName);
-		productCatalouge.addToCart();
+		driver.get("https://rahulshettyacademy.com/client");
+		driver.findElement(By.cssSelector("#userEmail")).sendKeys("sumitkoley727@gmail.com");
+		driver.findElement(By.cssSelector("#userPassword")).sendKeys("Sumit@123");
+		driver.findElement(By.cssSelector("#login")).click();
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".mb-3")));
+		List<WebElement>products =driver.findElements(By.cssSelector(".mb-3"));
+		WebElement prod = products.stream().filter(product->
+		product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst().orElse(null);
+		prod.findElement(By.cssSelector(".card-body button:last-of-type")).click();
+		wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector("#toast-container"))));
+		driver.findElement(By.cssSelector("[routerlink*='cart']")).click();
 		
 		List<WebElement> cartProducts = driver.findElements(By.cssSelector(".cartSection h3"));
 		Boolean match = cartProducts.stream().anyMatch(cartProduct->cartProduct.getText().equalsIgnoreCase(productName));
