@@ -22,7 +22,16 @@ public class LandingPage extends AbstractComponent {
 	WebElement password;
 	@FindBy(css="#login")
 	WebElement submit;
+    @FindBy(css="[class*='flyInOut']")
+    WebElement errorMessage;
+    @FindBy(css="div[class='left mt-1'] h3")
+    WebElement atmnTxt;
+	
 	By btn = By.cssSelector("#login");
+	By automationText = By.cssSelector("div[class='left mt-1'] h3");
+	By invalidLoginPopup = By.cssSelector("div[aria-label='Incorrect email or password.']");
+	
+	
 	
 	public void goTo()
 	{
@@ -36,7 +45,21 @@ public class LandingPage extends AbstractComponent {
 		userEmail.sendKeys(email);
 		password.sendKeys(psw);
 		submit.click();
+		
+		
 	}
+	public String automationText()
+	{
+		waitForElementToAppear(automationText);
+		return atmnTxt.getText();
+	}
+	public String invalidMessage()
+	{
+		waitForElementToAppear(invalidLoginPopup);
+		return errorMessage.getText();
+		
+	}
+
 	
 	
 
